@@ -58,10 +58,10 @@ def main(p, epochs=300):
     elif p in ['Train', 'train', 't']:
         for i in range(int(epochs)):
             print(f"Playing training game {i + 1}")
-            
+            print(ai.table)
             while ai.env.game_over == False:
                 
-                ai.env.clock.tick(120)
+                ai.env.clock.tick(100)
                 
                 for event in ai.env.pygame.event.get():
                     if event.type == ai.env.pygame.QUIT:
@@ -95,7 +95,7 @@ def main(p, epochs=300):
                     ai.env.reset()
                     break
                 
-                if ai.env.score >= 200: # snake is intelligent
+                if ai.env.score >= 50: # snake is intelligent enough
                     print(f'Last state: {state}\nScore: {ai.env.score}')
                     ai.env.reset()
                     break
@@ -130,10 +130,10 @@ def evaluate(ai, epochs):
     with open(f'./models/trained_{epochs}.pkl', 'rb') as f:
         ai.table = pickle.load(f)
     
-    for i in range(100):
+    for i in range(10):
         while ai.env.game_over == False:
         
-            ai.env.clock.tick(240)
+            ai.env.clock.tick(100)
             
             for event in ai.env.pygame.event.get():
                 if event.type == ai.env.pygame.QUIT:
@@ -149,7 +149,7 @@ def evaluate(ai, epochs):
                 ai.env.reset()
                 break
             
-            if ai.env.score >= 200:
+            if ai.env.score >= 50:
                 scores.append(ai.env.score)
                 ai.env.reset()
                 break
@@ -158,7 +158,7 @@ def evaluate(ai, epochs):
     for score in scores:
         total += score
         
-    print(f'Avarage score: {total/100}')
+    print(f'Avarage score: {total/10}')
     
 if __name__ == '__main__':
     if len(sys.argv) > 2:

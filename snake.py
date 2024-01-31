@@ -13,12 +13,13 @@ class Snake:
     def __init__(self):
         
         self.scale = 1
+        self.padding = 100 * self.scale
         self.game_width, self.game_height = 600 * self.scale, 600 * self.scale
         
-        self.snake_size = 100 * self.scale
-        self.food_size = 100 * self.scale
+        self.snake_size = 30 * self.scale
+        self.food_size = 30 * self.scale
         
-        self.screen_width, self.screen_height = self.game_width, self.game_height
+        self.screen_width, self.screen_height = self.game_width, self.game_height + self.padding
         self.board = np.zeros((self.game_height // self.snake_size, self.game_width // self.snake_size))
         
         self.dir = 'right'
@@ -100,6 +101,11 @@ class Snake:
         
         pygame.draw.rect(self.screen, self.color.blue, [x, y, self.snake_size, self.snake_size])
         
+    def print_score(self):
+        font = pygame.font.Font('freesansbold.ttf', 32)
+        text = font.render(f'Score: {self.score}', True, self.color.white)
+        self.screen.blit(text, (self.padding/2, self.screen_height-self.padding/2))
+        
     def take_action(self, action='None'):
         
         if action == 'None':
@@ -141,14 +147,18 @@ class Snake:
         if self.valid_index(self.r, self.c):
             self.board[self.r][self.c] = 1
         
+        self.draw_snake()
+        
         self.screen.fill(self.color.black)
+        
+        self.draw_snake()
+        
+        self.print_score()
         
         for row in range(len(self.board)):
             for col in range(len(self.board[0])):
                 x, y = self.index_to_coords(row, col)
                 pygame.draw.rect(self.screen, self.color.white, [x, y, (self.snake_size*self.scale), (self.snake_size*self.scale)], 1)
-                
-        self.draw_snake()
         
         food_x, food_y = self.index_to_coords(self.food_r, self.food_c)
         pygame.draw.rect(self.screen, self.color.red, [food_x, food_y, self.food_size, self.food_size])
